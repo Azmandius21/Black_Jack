@@ -1,3 +1,6 @@
+require 'pry'
+require_relative 'game'
+require_relative 'player'
 
 loop do
   #create Game
@@ -7,11 +10,12 @@ loop do
   puts "Enter player name"
   name = gets.chomp
   break if name == "quit"
+  #binding.pry
   game.player = Player.new(name)
   #gaming
-  game.begigning_game
-  game.first_card_distribution
-  game.second_card_distribution
-  game.scoring
-  game.continuation
+  game.begining_game
+  # game.first_card_distribution
+  # game.second_card_distribution
+  # game.scoring
+  # game.continuation
 end

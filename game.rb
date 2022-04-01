@@ -1,4 +1,6 @@
 require 'pry'
+require_relative 'player'
+
 
 class Game
   CARDS = {"2^": 2, "2+": 2, "2<3": 2, "2<>": 2,
@@ -22,15 +24,19 @@ class Game
     @total_cash = 0
     @dealer_cash = 100
     @cards_in_game = CARDS
-    @dealer_cards = []
+    @dealer_cards = {}
     @dealer_points = 0
     @dealer_bid = 10
     @player = nil
   end
 
-  def begigning_game
+  def begining_game
     puts "The game has started!"
-
+    #binding.pry
+    2.times{ player.cards.merge!(give_card) }
+    puts "You take 2 cards:  #{player.cards.keys}"
+    2.times{ dealer_cards.merge!(give_card) }
+    puts "Dealer take 2 cards:  * * "
   end
 
   def give_card
