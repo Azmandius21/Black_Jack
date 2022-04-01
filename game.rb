@@ -14,12 +14,23 @@ class Game
            "T^": [1, 10], "T+": [1, 10], "T<3": [1, 10], "T<>": [1, 10], "T^": [1, 10],
           }
 
+
   def initialize
     @total_cash = 0
     @dealer_cash = 100
     @cards_in_game = CARDS
     @dealer_cards_now = []
-    @dealer_have_points = 0
+    @dealer_points = 0
     @dealer_bid = 10
+    @player = nil
   end
+
+  def begigning_game
+
+  end
+
+  private
+
+  attr_accessor :player, :total_cash, :dealer_cash, :cards_in_game,
+                :dealer_cards_now, :dealer_points, :dealer_bid
 end

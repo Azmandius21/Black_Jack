@@ -2,10 +2,16 @@
 loop do
   #create Game
   game = Game.new
+
+  #addition player to game
+  puts "Enter player name"
+  name = gets.chomp
+  break if name == "quit"
+  game.player = Player.new(name)
   #gaming
-  begigning_game
-  first_card_distribution
-  second_card_distribution
-  scoring
-  continuation
+  game.begigning_game
+  game.first_card_distribution
+  game.second_card_distribution
+  game.scoring
+  game.continuation
 end
