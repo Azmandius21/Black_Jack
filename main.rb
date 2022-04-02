@@ -13,8 +13,9 @@ loop do
   #binding.pry
   game.player = Player.new(name)
   #gaming
+  puts "The game has started!"
   game.begining_game
   game.second_card_distribution
-  # game.scoring
-  # game.continuation
+  game.scoring
+  game.continuation
 end
