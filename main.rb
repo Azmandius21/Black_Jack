@@ -14,8 +14,7 @@ loop do
   game.player = Player.new(name)
   #gaming
   game.begining_game
-  # game.first_card_distribution
-  # game.second_card_distribution
+  game.second_card_distribution
   # game.scoring
   # game.continuation
 end
