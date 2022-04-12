@@ -16,7 +16,7 @@ class Game
            "J^": 10, "J+": 10, "J<3": 10, "J<>": 10,
            "Q^": 10, "Q+": 10, "Q<3": 10, "Q<>": 10,
            "K^": 10, "K+": 10, "K<3": 10, "K<>": 10,
-           "A^": 10, "A+": 10, "A<3": 1, "A<>": 1
+           "A^": 10, "A+": 10, "A<3": 10, "A<>": 10
          }
   RISKY = 17.freeze
   attr_accessor :player, :total_cash, :dealer, :card_deck, :bank, :show, :count_add, :count_pass, :count_show_dealer_cards
@@ -52,7 +52,7 @@ class Game
 
   def begining_game
     2.times{ player.cards.merge!(give_card) }
-    puts "You take 2 cards:  #{player.cards.keys}"
+    puts "#{player.name} take 2 cards:  #{player.cards.keys}"
     2.times{ dealer.cards.merge!(give_card) }
     puts "Dealer take 2 cards:  #{dealer.cards.keys}* * "
     #binding.pry
@@ -63,11 +63,6 @@ class Game
     bid_dealer = dealer.cash - dealer.bid
     self.bank = bid_dealer + bid_player
     self.total_cash = bank + player.cash + dealer.cash
-  end
-
-  def show_cards
-    show.call(player.cards, "#{player.name}")
-    show.call(dealer.cards, "Dealer")
   end
 
   def choise
@@ -83,6 +78,7 @@ class Game
   def add
     player.cards.merge!(give_card)
     self.count_add += 1
+    player.show_cards(player.name)
   end
 
   def pass
@@ -91,27 +87,36 @@ class Game
 
   def choise_dealer
     scoring(dealer)
+    dd = dealer.cards.size
     dealer.cards.merge!(give_card) if dealer.points < 17
+    puts "Dealer taked 1 card" if dealer.cards.size > dd
   end
 
   def open_cards
     self.count_add += 1
     self.count_pass += 1
     self.count_show_dealer_cards += 1
-    # puts "Players cards:  #{player.cards.keys}"
-    # puts "Dealer  cards:  #{dealer.cards.keys}"
+    player.show_cards(player.name)
+    dealer.show_cards('Dealer')
   end
 
-  def scoring(pldl)
-      pldl.points = pldl.cards.values.inject do |sum, point|
+  def scoring(participant)
+      participant.points = participant.cards.values.inject do |sum, point|
       sum += point
      end
+     participant.cards.keys.each do |card|
+       if card =~/[A]/
+        participant.points -= 9 if participant.points > 21
+       end
+     end
+     participant.points
   end
 
   def results
     points_dealer = scoring(dealer)
     points_player = scoring(player)
-    show_cards
+    player.show_cards(player.name)
+    dealer.show_cards('Dealer')
     puts "Players score: #{points_player}"
     puts "Dealer score: #{points_dealer}"
     if points_dealer == points_player
@@ -126,36 +131,6 @@ class Game
       puts "dealer win"
     end
   end
-  # def scoring_player
-  #   player.points = player.cards.values.inject{ |sum, point|  sum += point }
-  # end
-
-  # def dealer_win
-  #   puts "Dealer win :( with #{dealer_points} points vs #{player.points} player points"
-  #   self.dealer_cash += bank
-  # end
-  #
-  # def player_win
-  #   puts "#{player.name} win !!! with #{player.points} points vs #{dealer_points} dealer points"
-  #   player.cash += bank
-  # end
-  #
-  #
-  # def scoring
-  #   scoring_dealer
-  #   scoring_player
-  #   self.dealer_points  = 21 - dealer_points
-  #   player.points = 21 - player.points
-  #   dealer_points < player.points ? dealer_win : player_win
-  #
-  #   self.dealer_points = 0
-  #   player.points = 0
-  #   self.bank = 0
-  # end
-  #
-  # def close_to_21
-  #   self - 21
-  # end
 
   private
 

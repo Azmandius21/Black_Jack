@@ -1,6 +1,7 @@
 require 'pry'
 require_relative 'game'
 require_relative 'player'
+require_relative 'show_cards'
 
 
 
@@ -26,6 +27,8 @@ loop do
   #gaming
   loop do
     puts "The game has started!"
+    puts "#{name} cash : #{game.player.cash}"
+    puts "Dealer cash : #{game.dealer.cash}"
     game.begining_game
     game.bid #player and dealer puts a bid
     game.choise
@@ -39,7 +42,5 @@ loop do
     break if response == "2"
     game.player.reset_points_and_cards!
     game.dealer.reset_points_and_cards!
-    #binding.pry
   end
-  continuation
 end

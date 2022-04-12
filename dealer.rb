@@ -1,12 +1,13 @@
 require_relative 'game'
+require_relative 'show_cards'
 
 class Dealer
   include Reset
+  include ShowCards
 
   STARTMONEY = 100
 
   attr_accessor :cash, :bid, :cards, :points
-  attr_reader :name
 
   def initialize
     @cash = STARTMONEY
