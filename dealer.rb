@@ -1,6 +1,7 @@
 require_relative 'game'
 
 class Dealer
+  include Reset
 
   STARTMONEY = 100
 

@@ -37,6 +37,9 @@ loop do
     puts "2 - Stop whis game"
     response = gets.chomp
     break if response == "2"
+    game.player.reset_points_and_cards!
+    game.dealer.reset_points_and_cards!
+    #binding.pry
   end
   continuation
 end

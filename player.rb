@@ -1,7 +1,8 @@
 require_relative 'game'
+require_relative 'reset'
 
 class Player
-
+  include Reset
   STARTMONEY = 100
 
   attr_accessor :cash, :bid, :cards, :points
@@ -18,6 +19,10 @@ class Player
     puts "Players cards : #{cards.keys}"
   end
 
+  def reset!
+    self.cards = {}
+    self.points = 0
+  end
 
   private
 
