@@ -27,7 +27,7 @@ class Game
     @dealer = nil
     @player = nil
     @bank = 0
-    @show = proc {|cards| puts "The #{self} have cards : #{cards.keys}"}
+    @show = proc {|cards, owner| puts "#{owner} have cards : #{cards.keys}"}
     @count_add = 0
     @count_pass = 0
     @count_show_dealer_cards = 0
@@ -66,8 +66,8 @@ class Game
   end
 
   def show_cards
-    show.call(player.cards)
-    show.call(dealer.cards)
+    show.call(player.cards, "#{player.name}")
+    show.call(dealer.cards, "Dealer")
   end
 
   def choise
@@ -98,8 +98,8 @@ class Game
     self.count_add += 1
     self.count_pass += 1
     self.count_show_dealer_cards += 1
-    puts "Players cards:  #{player.cards.keys}"
-    puts "Dealer  cards:  #{dealer.cards.keys}"
+    # puts "Players cards:  #{player.cards.keys}"
+    # puts "Dealer  cards:  #{dealer.cards.keys}"
   end
 
   def scoring(pldl)
@@ -108,6 +108,24 @@ class Game
      end
   end
 
+  def results
+    points_dealer = scoring(dealer)
+    points_player = scoring(player)
+    show_cards
+    puts "Players score: #{points_player}"
+    puts "Dealer score: #{points_dealer}"
+    if points_dealer == points_player
+      puts "dead heat"
+    elsif points_dealer > 21
+      puts "dealer to much"
+    elsif points_player > 21
+      puts "player to much"
+    elsif points_player > points_dealer
+      puts "player win"
+    else
+      puts "dealer win"
+    end
+  end
   # def scoring_player
   #   player.points = player.cards.values.inject{ |sum, point|  sum += point }
   # end
@@ -137,13 +155,6 @@ class Game
   #
   # def close_to_21
   #   self - 21
-  # end
-  # def continuation
-  #   option = {"1" => begining_game, "2" => "Game over".inspect }
-  #   puts "1 - Do you want to play again"
-  #   puts "2 - Stop whis game"
-  #   response = gets.chomp
-  #   option[response]
   # end
 
   private
