@@ -121,15 +121,22 @@ class Game
     puts "Dealer score: #{points_dealer}"
     if points_dealer == points_player
       puts "dead heat"
+      player.cash = bank/2
+      dealer.cash = bank/2
     elsif points_dealer > 21
       puts "dealer to much"
+      player.cash = bank
     elsif points_player > 21
       puts "player to much"
+      dealer.cash = bank
     elsif points_player > points_dealer
       puts "player win"
+      player.cash = bank
     else
       puts "dealer win"
+      dealer.cash = bank 
     end
+    self.bank = 0
   end
 
   private

@@ -3,14 +3,6 @@ require_relative 'game'
 require_relative 'player'
 require_relative 'show_cards'
 
-
-
-def gaming
-
-end
-
-
-
 loop do
 
   #create Game
