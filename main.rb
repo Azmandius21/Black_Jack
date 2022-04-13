@@ -25,14 +25,13 @@ loop do
     game.bid #player and dealer puts a bid
     game.choise
     gamecount = game.count_add + game.count_pass
-    game.choise_dealer if game.count_show_dealer_cards == 0
+    game.choise_dealer 
     game.choise if gamecount < 2
     game.results
     puts "1 - Do you want to play again"
     puts "2 - Stop whis game"
     response = gets.chomp
     break if response == "2"
-    game.player.reset_points_and_cards!
-    game.dealer.reset_points_and_cards!
+    game.start_new_round
   end
 end

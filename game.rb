@@ -1,8 +1,10 @@
 require 'pry'
 require_relative 'player'
 require_relative 'dealer'
+require_relative 'reset'
 
 class Game
+  include Reset
 
   CARD_DECK = {"2^": 2, "2+": 2, "2<3": 2, "2<>": 2,
            "3^": 3, "3+": 3, "3<3": 3, "3<>": 3,
@@ -22,17 +24,30 @@ class Game
   attr_accessor :player, :total_cash, :dealer, :card_deck, :bank, :show, :count_add, :count_pass, :count_show_dealer_cards
 
   def initialize
+    setup_new_game
+    @show = proc {|cards, owner| puts "#{owner} have cards : #{cards.keys}"}
+  end
+
+  def setup_new_game
     @total_cash = 0
     @card_deck = {}
     @dealer = nil
     @player = nil
+    reset_current_session!
+  end
+
+  def start_new_round
+    reset_current_session!
+    player.reset_points_and_cards!
+    dealer.reset_points_and_cards!
+  end
+
+  def reset_current_session!
     @bank = 0
-    @show = proc {|cards, owner| puts "#{owner} have cards : #{cards.keys}"}
     @count_add = 0
     @count_pass = 0
     @count_show_dealer_cards = 0
   end
-
   # show = proc {|cards| puts "The #{self} have cards : #{cards.keys}"}
   # show.call(player.cards)
   # show.call(dealer.cards)
@@ -54,14 +69,14 @@ class Game
     2.times{ player.cards.merge!(give_card) }
     puts "#{player.name} take 2 cards:  #{player.cards.keys}"
     2.times{ dealer.cards.merge!(give_card) }
-    puts "Dealer take 2 cards:  #{dealer.cards.keys}* * "
+    puts "Dealer take 2 cards:  * * "
     #binding.pry
   end
 
   def bid
-    bid_player = player.cash - player.bid
-    bid_dealer = dealer.cash - dealer.bid
-    self.bank = bid_dealer + bid_player
+    player.cash -= player.bid
+    dealer.cash -= dealer.bid
+    self.bank = player.bid + dealer.bid
     self.total_cash = bank + player.cash + dealer.cash
   end
 
@@ -95,7 +110,7 @@ class Game
   def open_cards
     self.count_add += 1
     self.count_pass += 1
-    self.count_show_dealer_cards += 1
+    #self.count_show_dealer_cards += 1
     player.show_cards(player.name)
     dealer.show_cards('Dealer')
   end
@@ -121,22 +136,21 @@ class Game
     puts "Dealer score: #{points_dealer}"
     if points_dealer == points_player
       puts "dead heat"
-      player.cash = bank/2
-      dealer.cash = bank/2
+      player.cash += bank/2
+      dealer.cash += bank/2
     elsif points_dealer > 21
       puts "dealer to much"
-      player.cash = bank
+      player.cash += bank
     elsif points_player > 21
       puts "player to much"
-      dealer.cash = bank
+      dealer.cash += bank
     elsif points_player > points_dealer
       puts "player win"
-      player.cash = bank
+      player.cash += bank
     else
       puts "dealer win"
-      dealer.cash = bank 
+      dealer.cash += bank
     end
-    self.bank = 0
   end
 
   private
