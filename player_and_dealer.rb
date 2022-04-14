@@ -2,7 +2,7 @@ require_relative 'game'
 require_relative 'reset'
 require_relative 'show_cards'
 
-class Player
+class Human
   include Reset
   include ShowCards
 

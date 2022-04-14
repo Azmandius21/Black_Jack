@@ -1,6 +1,6 @@
-require 'pry'
+#require 'pry'
 require_relative 'game'
-require_relative 'player'
+require_relative 'player_and_dealer'
 require_relative 'show_cards'
 
 loop do
@@ -13,8 +13,8 @@ loop do
   puts "Enter player name"
   name = gets.chomp
   break if name == "quit"
-  game.player = Player.new(name)
-  game.dealer = Dealer.new
+  game.player = Human.new(name)
+  game.dealer = Human.new("Dealer")
 
   #gaming
   loop do
@@ -25,10 +25,11 @@ loop do
     game.bid #player and dealer puts a bid
     game.choise
     gamecount = game.count_add + game.count_pass
-    game.choise_dealer 
+    game.choise_dealer
     game.choise if gamecount < 2
     game.results
-    puts "1 - Do you want to play again"
+    puts "Do you want to play again"
+    puts "1 - Continue current card game "
     puts "2 - Stop whis game"
     response = gets.chomp
     break if response == "2"
