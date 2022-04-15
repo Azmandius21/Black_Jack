@@ -18,6 +18,4 @@ class Human
     @points = 0
     @bid = 10
   end
-
-  private
 end
