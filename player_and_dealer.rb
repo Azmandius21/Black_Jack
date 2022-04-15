@@ -19,6 +19,4 @@ class Human
   end
 
   private
-
-
 end
