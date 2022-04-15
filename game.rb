@@ -1,6 +1,5 @@
-require 'pry'
-require_relative 'player'
-require_relative 'dealer'
+#require 'pry'
+require_relative 'player_and_dealer'
 require_relative 'reset'
 
 class Game
@@ -21,7 +20,8 @@ class Game
            "A^": 10, "A+": 10, "A<3": 10, "A<>": 10
          }
   RISKY = 17.freeze
-  attr_accessor :player, :total_cash, :dealer, :card_deck, :bank, :show, :count_add, :count_pass, :count_show_dealer_cards
+  attr_accessor :player, :total_cash, :dealer, :card_deck, :bank, :show,
+  :count_add, :count_pass, :count_show_dealer_cards, :count_open_cards
 
   def initialize
     setup_new_game
@@ -46,6 +46,7 @@ class Game
     @bank = 0
     @count_add = 0
     @count_pass = 0
+    @count_open_cards = 0
     @count_show_dealer_cards = 0
   end
   # show = proc {|cards| puts "The #{self} have cards : #{cards.keys}"}
@@ -77,7 +78,7 @@ class Game
     player.cash -= player.bid
     dealer.cash -= dealer.bid
     self.bank = player.bid + dealer.bid
-    self.total_cash = bank + player.cash + dealer.cash
+    self.total_cash = bank + player.cash + dealer.cash # must deleted
   end
 
   def choise
@@ -103,13 +104,14 @@ class Game
   def choise_dealer
     scoring(dealer)
     dd = dealer.cards.size
-    dealer.cards.merge!(give_card) if dealer.points < 17
+    dealer.cards.merge!(give_card) if dealer.points < RISKY
     puts "Dealer taked 1 card" if dealer.cards.size > dd
   end
 
   def open_cards
-    self.count_add += 1
+    self.count_add += 1 # refactoring!!!!
     self.count_pass += 1
+    self.count_open_cards += 1
     #self.count_show_dealer_cards += 1
     player.show_cards(player.name)
     dealer.show_cards('Dealer')
@@ -130,8 +132,7 @@ class Game
   def results
     points_dealer = scoring(dealer)
     points_player = scoring(player)
-    player.show_cards(player.name)
-    dealer.show_cards('Dealer')
+    open_cards if count_open_cards == 0
     puts "Players score: #{points_player}"
     puts "Dealer score: #{points_dealer}"
     if points_dealer == points_player
