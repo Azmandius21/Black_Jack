@@ -67,7 +67,8 @@ class Game
     puts "#{player.name} take 2 cards:  #{player.cards.keys}"
     2.times{ dealer.cards.merge!(give_card) }
     puts "Dealer take 2 cards:  * * "
-    #binding.pry
+    bid
+    choise
   end
 
   def bid
@@ -78,9 +79,9 @@ class Game
 
   def choise
     options = { "1" => :pass, "2" => :add, "3" => :open_cards }
-    puts "What do you want to do?"
+    puts "You have #{scoring(player)} points \n#{player.name}, what do you want to do?"
     puts "Pass - 1" if count_pass == 0
-    puts "Add card - 2" if count_add == 0
+    puts "Take card - 2" if count_add == 0
     puts "Open cards - 3"
     response = gets.chomp
     send options[response]

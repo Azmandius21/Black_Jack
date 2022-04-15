@@ -22,8 +22,7 @@ loop do
     puts "The game has started!"
     game.all_person_cash
     game.begining_game
-    game.bid #player and dealer puts a bid
-    game.choise
+    #game.choise
     gamecount = game.count_add + game.count_pass
     #game.choise_dealer
     game.choise if gamecount < 2
