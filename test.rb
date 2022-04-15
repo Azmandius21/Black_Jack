@@ -3,3 +3,7 @@ def foo
 end
 
 1.send :foo
+
+def bar
+  foo
+end

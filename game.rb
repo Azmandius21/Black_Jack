@@ -20,7 +20,7 @@ class Game
            "A^": 10, "A+": 10, "A<3": 10, "A<>": 10
          }
   RISKY = 17.freeze
-  attr_accessor :player, :total_cash, :dealer, :card_deck, :bank, :show,
+  attr_accessor :player, :dealer, :card_deck, :bank, :show,
   :count_add, :count_pass, :count_show_dealer_cards, :count_open_cards
 
   def initialize
@@ -29,7 +29,6 @@ class Game
   end
 
   def setup_new_game
-    @total_cash = 0
     @card_deck = {}
     @dealer = nil
     @player = nil
@@ -49,9 +48,6 @@ class Game
     @count_open_cards = 0
     @count_show_dealer_cards = 0
   end
-  # show = proc {|cards| puts "The #{self} have cards : #{cards.keys}"}
-  # show.call(player.cards)
-  # show.call(dealer.cards)
 
   def create_card_deck
     CARD_DECK.keys.each{ |key| self.card_deck[key] = CARD_DECK[key] }
@@ -78,7 +74,6 @@ class Game
     player.cash -= player.bid
     dealer.cash -= dealer.bid
     self.bank = player.bid + dealer.bid
-    self.total_cash = bank + player.cash + dealer.cash # must deleted
   end
 
   def choise
@@ -99,62 +94,74 @@ class Game
 
   def pass
     self.count_pass += 1
+    dealer_choise unless dealer.cards.size > 2
   end
 
-  def choise_dealer
+  def dealer_choise
     scoring(dealer)
-    dd = dealer.cards.size
+    dealer_deck = dealer.cards.size
     dealer.cards.merge!(give_card) if dealer.points < RISKY
-    puts "Dealer taked 1 card" if dealer.cards.size > dd
+    puts "Dealer taked 1 card" if dealer.cards.size > dealer_deck
   end
 
   def open_cards
     self.count_add += 1 # refactoring!!!!
     self.count_pass += 1
     self.count_open_cards += 1
-    #self.count_show_dealer_cards += 1
+    dealer_choise unless dealer.cards.size > 2
     player.show_cards(player.name)
     dealer.show_cards('Dealer')
   end
 
-  def scoring(participant)
-      participant.points = participant.cards.values.inject do |sum, point|
+  def scoring(human)
+      human.points = human.cards.values.inject do |sum, point|
       sum += point
      end
-     participant.cards.keys.each do |card|
+     human.cards.keys.each do |card|
        if card =~/[A]/
-        participant.points -= 9 if participant.points > 21
+        human.points -= 10 if human.points > 21
        end
      end
-     participant.points
+     human.points
   end
 
-  def results
-    points_dealer = scoring(dealer)
-    points_player = scoring(player)
-    open_cards if count_open_cards == 0
-    puts "Players score: #{points_player}"
-    puts "Dealer score: #{points_dealer}"
-    if points_dealer == points_player
-      puts "dead heat"
-      player.cash += bank/2
-      dealer.cash += bank/2
-    elsif points_dealer > 21
-      puts "dealer to much"
-      player.cash += bank
-    elsif points_player > 21
-      puts "player to much"
-      dealer.cash += bank
-    elsif points_player > points_dealer
-      puts "player win"
-      player.cash += bank
+    def results
+    round_results
+    if dealer.points == player.points
+      dead_heat
+    elsif dealer.points > 21
+      player.points > 21 ? dead_heat : winner(player)
+    elsif player.points > 21
+      dealer.points > 21 ? dead_heat : winner(dealer)
+    elsif player.points < dealer.points
+      winner(dealer)
     else
-      puts "dealer win"
-      dealer.cash += bank
+      winner(player)
     end
+  end
+
+  def all_person_cash
+    puts "#{player.name} cash : #{player.cash}"
+    puts "Dealer cash : #{dealer.cash}"
   end
 
   private
 
+  def winner(human)
+    puts "#{human.name} win"
+    human.cash += bank
+  end
 
+  def dead_heat
+    player.cash += bank/2
+    dealer.cash += bank/2
+    puts "Dead heat"
+  end
+
+  def round_results
+    dealer.points = scoring(dealer)
+    player.points = scoring(player)
+    open_cards if count_open_cards == 0
+    puts "#{player.name} - #{player.points} vs  #{dealer.points} - Dealer"
+  end
 end

@@ -12,7 +12,8 @@ class Human
   attr_reader :name
 
   def initialize(name)
-    @name, @cash = name, STARTMONEY
+    @name = name
+    @cash = STARTMONEY
     @cards = {}
     @points = 0
     @bid = 10

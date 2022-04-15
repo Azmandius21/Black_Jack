@@ -10,8 +10,9 @@ loop do
   game.create_card_deck
 
   #addition player to game
-  puts "Enter player name"
+  puts "Enter player name \n(enter 'quit' to escape)"
   name = gets.chomp
+  raise "Invalid name" unless name =~ /\w/
   break if name == "quit"
   game.player = Human.new(name)
   game.dealer = Human.new("Dealer")
@@ -19,15 +20,15 @@ loop do
   #gaming
   loop do
     puts "The game has started!"
-    puts "#{name} cash : #{game.player.cash}"
-    puts "Dealer cash : #{game.dealer.cash}"
+    game.all_person_cash
     game.begining_game
     game.bid #player and dealer puts a bid
     game.choise
     gamecount = game.count_add + game.count_pass
-    game.choise_dealer
+    #game.choise_dealer
     game.choise if gamecount < 2
     game.results
+    game.all_person_cash
     puts "Do you want to play again"
     puts "1 - Continue current card game "
     puts "2 - Stop whis game"
