@@ -18,17 +18,11 @@ loop do
     game.choise if gamecount < 2
     game.results
     game.all_person_cash
+    game.player.controler!
+    game.dealer.controler!
     puts "Do you want to play again\n1 - Continue current card game\n2 - Stop whis game"
-    if game.player.cash < 0
-      response = "2"
-      puts "#{game.player.name} lost all cash"
-    elsif game.dealer.cash < 10
-      response = "2"
-      puts "Dealer lost all cash"
-    else
-      response = gets.chomp
-    end
-    break if response == '2' || 
+    response = gets.chomp
+    break if response == '2' || !game.player.count_stop_game.nil?
     game.start_new_round
   end
 end

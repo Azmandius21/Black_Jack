@@ -1,3 +1,4 @@
+require 'pry'
 require_relative 'player_and_dealer'
 require_relative 'reset'
 
@@ -18,6 +19,7 @@ class Game
                 "K^": 10, "K+": 10, "K<3": 10, "K<>": 10,
                 "A^": 11, "A+": 11, "A<3": 11, "A<>": 11 }.freeze
   RISKY = 17.freeze
+  CHOISE = /^(1|2|3){1}$/.freeze
 
   attr_accessor :player, :dealer, :card_deck, :bank, :show,
                 :count_add, :count_pass, :count_open_cards
@@ -50,7 +52,7 @@ class Game
         puts 'Take card - 2' if count_add.zero?
         puts 'Open cards - 3'
         response = gets.chomp
-        raise "You must select and put number" unless response =~ /[123]/
+        raise "You must select and put number" unless response =~ CHOISE
         send options[response]
       rescue RuntimeError => ex
           puts ex.message
@@ -100,7 +102,7 @@ class Game
   end
 
   def create_card_deck
-    CARD_DECK.each_key { |key| card_deck[key] = CARD_DECK[key] }
+    self.card_deck = CARD_DECK.dup
   end
 
   def give_card
@@ -171,9 +173,5 @@ class Game
     dealer_choise unless dealer.cards.size > 2
     player.show_cards(player.name)
     dealer.show_cards('Dealer')
-  end
-
-  def validate
-
   end
 end
