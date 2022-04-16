@@ -28,7 +28,7 @@ loop do
     else
       response = gets.chomp
     end
-    break if response == '2'
+    break if response == '2' || 
     game.start_new_round
   end
 end

@@ -44,18 +44,18 @@ class Game
 
   def choise
     options = { '1' => :pass, '2' => :add, '3' => :open_cards }
-    begin
       puts "You have #{scoring(player)} points \n#{player.name}, what do you want to do?"
-      puts 'Pass - 1' if count_pass.zero?
-      puts 'Take card - 2' if count_add.zero?
-      puts 'Open cards - 3'
-      response = gets.chomp
-      raise "You must select and put number" unless response =~ /[123]/
-      send options[response]
-    resque RuntimeError => ex
-      puts ex.message
-      retry
-    end
+      begin
+        puts 'Pass - 1' if count_pass.zero?
+        puts 'Take card - 2' if count_add.zero?
+        puts 'Open cards - 3'
+        response = gets.chomp
+        raise "You must select and put number" unless response =~ /[123]/
+        send options[response]
+      rescue RuntimeError => ex
+          puts ex.message
+          retry
+      end
   end
 
   def results
@@ -171,5 +171,9 @@ class Game
     dealer_choise unless dealer.cards.size > 2
     player.show_cards(player.name)
     dealer.show_cards('Dealer')
+  end
+
+  def validate
+
   end
 end
