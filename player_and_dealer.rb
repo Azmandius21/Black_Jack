@@ -18,7 +18,7 @@ class Human
     @cash = STARTMONEY.dup
     @cards = {}
     @points = 0
-    @bid = 100
+    @bid = 10
     @@instances.push(self)
   end
   @@count_stop_game = nil
@@ -28,9 +28,11 @@ class Human
   end
 
   def controler!
-    if self.cash <= 0
-      @@count_stop_game ||= 1
-      puts "#{self.name} lost all cash and lose this game"
+    @@instances.each do |inst|
+      if inst.cash <= 0
+        puts "#{inst.name} lost all cash and lose this game"
+        @@count_stop_game ||= 1
+      end
     end
   end
 end

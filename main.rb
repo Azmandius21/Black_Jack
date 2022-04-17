@@ -1,4 +1,3 @@
-# require 'pry'
 require_relative 'game'
 require_relative 'player_and_dealer'
 require_relative 'show_cards'
@@ -19,8 +18,9 @@ loop do
     game.results
     game.all_person_cash
     game.player.controler!
-    game.dealer.controler!
-    puts "Do you want to play again\n1 - Continue current card game\n2 - Stop whis game"
+    puts "Do you want to play again
+    1 - Continue current card game
+    2 - Stop whis game" if  game.player.count_stop_game.nil?
     response = gets.chomp
     break if response == '2' || !game.player.count_stop_game.nil?
     game.start_new_round

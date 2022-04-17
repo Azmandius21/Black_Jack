@@ -1,4 +1,3 @@
-require 'pry'
 require_relative 'player_and_dealer'
 require_relative 'reset'
 
@@ -48,9 +47,9 @@ class Game
     options = { '1' => :pass, '2' => :add, '3' => :open_cards }
       puts "You have #{scoring(player)} points \n#{player.name}, what do you want to do?"
       begin
-        puts 'Pass - 1' if count_pass.zero?
-        puts 'Take card - 2' if count_add.zero?
-        puts 'Open cards - 3'
+        puts 'Pass - 1'.rjust(40) if count_pass.zero?
+        puts 'Take card - 2'.rjust(40) if count_add.zero?
+        puts 'Open cards - 3'.rjust(40)
         response = gets.chomp
         raise "You must select and put number" unless response =~ CHOISE
         send options[response]
