@@ -6,7 +6,7 @@ class Human
   include Reset
   include ShowCards
 
-  STARTMONEY = 100.freeze
+  STARTMONEY = 100
 
   attr_accessor :cash, :bid, :cards, :points
   attr_reader :name

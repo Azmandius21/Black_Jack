@@ -7,10 +7,11 @@ loop do
   puts "Enter player name \n(enter 'quit' to escape)"
   name = gets.chomp
   break if name == 'quit'
+
   game.player = Human.new(name)
   game.dealer = Human.new('Dealer')
   loop do
-    puts 'The game has started!'
+    puts 'The game started!'
     game.all_person_cash
     game.begining_game
     gamecount = game.count_add + game.count_pass
@@ -18,11 +19,14 @@ loop do
     game.results
     game.all_person_cash
     game.player.controler!
-    puts "Do you want to play again
-    1 - Continue current card game
-    2 - Stop whis game" if  game.player.count_stop_game.nil?
+    if game.player.count_stop_game.nil?
+      puts "Do you want to play again
+      1 - Continue current card game
+      2 - Stop whis game"
+    end
     response = gets.chomp
     break if response == '2' || !game.player.count_stop_game.nil?
+
     game.start_new_round
   end
 end

@@ -17,7 +17,7 @@ class Game
                 "Q^": 10, "Q+": 10, "Q<3": 10, "Q<>": 10,
                 "K^": 10, "K+": 10, "K<3": 10, "K<>": 10,
                 "A^": 11, "A+": 11, "A<3": 11, "A<>": 11 }.freeze
-  RISKY = 17.freeze
+  RISKY = 17
   CHOISE = /^(1|2|3){1}$/.freeze
 
   attr_accessor :player, :dealer, :card_deck, :bank, :show,
@@ -45,18 +45,19 @@ class Game
 
   def choise
     options = { '1' => :pass, '2' => :add, '3' => :open_cards }
-      puts "You have #{scoring(player)} points \n#{player.name}, what do you want to do?"
-      begin
-        puts 'Pass - 1'.rjust(40) if count_pass.zero?
-        puts 'Take card - 2'.rjust(40) if count_add.zero?
-        puts 'Open cards - 3'.rjust(40)
-        response = gets.chomp
-        raise "You must select and put number" unless response =~ CHOISE
-        send options[response]
-      rescue RuntimeError => ex
-          puts ex.message
-          retry
-      end
+    puts "You have #{scoring(player)} points \n#{player.name}, what do you want to do?"
+    begin
+      puts 'Pass - 1'.rjust(40) if count_pass.zero?
+      puts 'Take card - 2'.rjust(40) if count_add.zero?
+      puts 'Open cards - 3'.rjust(40)
+      response = gets.chomp
+      raise 'You must select and put number' unless response =~ CHOISE
+
+      send options[response]
+    rescue RuntimeError => e
+      puts e.message
+      retry
+    end
   end
 
   def results
@@ -96,7 +97,7 @@ class Game
     if card_deck.size < 6
       self.card_deck = {}
       create_card_deck
-      puts "!!! New card deck !!!"
+      puts '!!! New card deck !!!'
     end
   end
 
